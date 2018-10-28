@@ -1,5 +1,4 @@
 # USAGE: python face-movie/align.py -images IMAGES -target TARGET [-overlay] [-border BORDER] -outdir OUTDIR
-# e.g. python face-movie/align.py -images demos/cdt -target demos/cdt/cdt00000.jpg -overlay -border 5 -outdir cdt_aligned
 
 import cv2
 import dlib
@@ -176,6 +175,7 @@ if __name__ == "__main__":
     # Constraints on input images (for aligning):
     # - Must have clear frontal view of a face (there may be multiple)
     # - Filenames must be in lexicographic order of the order in which they are to appear  
+    
     im_files = [f for f in os.listdir(im_dir) if get_ext(f) in valid_formats]
     im_files = sorted(im_files, key=lambda x: x.split('/'))
     for im in im_files:

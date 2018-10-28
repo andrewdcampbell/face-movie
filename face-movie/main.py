@@ -1,8 +1,4 @@
 # USAGE: python face-movie/main.py (-morph | -average) -images IMAGES [-td TD] [-pd PD] [-fps FPS] -out OUT
-# e.g. for morph video:
-#   python face-movie/main.py -morph -images demos/cdt -td 1 -pd 0 -fps 30 -out cdt_morph.mp4
-# e.g. for face average:
-#   python face-movie/main.py -average -images demos/cdt -out cdt_average.jpg
 
 from scipy.spatial import Delaunay
 from PIL import Image
@@ -87,31 +83,6 @@ def annotate_landmarks(im, landmarks):
 ########################################
 # MAIN DRIVER FUNCTIONS
 ########################################
-
-# TODO: probably delete this
-def change_appearence(out_name):
-    # put desired images here
-    srcim = cv2.imread("javier.jpg")
-    dstim = cv2.imread("dean.jpg")
-
-    # src and dst should be the same size, but uncomment if this is not the case
-    # dstim = cv2.resize(dstim, (srcim.shape[1], srcim.shape[0]))
-
-    srclandmarks = get_landmarks(srcim)
-    dstlandmarks = get_landmarks(dstim)
-
-    # change shape blend here (if outside 0-1 range, extrapolation occurs)
-    midlandmarks = srclandmarks * -0.5 + dstlandmarks * 1.5
-    triangulation = Delaunay(midlandmarks).simplices
-
-    srctodst = warp_im(np.float32(srcim), srclandmarks, midlandmarks, triangulation)
-    dsttosrc = warp_im(np.float32(dstim), dstlandmarks, midlandmarks, triangulation)
-    
-    # change color blend here
-    blend = srctodst * 0 + dsttosrc * 1.0
-    blend = np.uint8(blend)
-    cv2.imwrite(out_name, blend)
-
 
 def average_images(out_name):
     avg_landmarks = sum(LANDMARK_LIST) / len(LANDMARK_LIST)
@@ -213,8 +184,8 @@ if __name__ == "__main__":
     # - Must all have same dimension
     # - Must have clear frontal view of a face (there may be multiple)
     # - Filenames must be in lexicographic order of the order in which they are to appear
+
     IM_FILES = [f for f in os.listdir(IM_DIR) if get_ext(f) in valid_formats]
-    # TODO: remove my custom filename convention
     IM_FILES = sorted(IM_FILES, key=lambda x: x.split('/'))
     assert len(IM_FILES) > 0, "No valid images found in {}".format(IM_DIR)
 
@@ -227,7 +198,6 @@ if __name__ == "__main__":
         morph_images(DURATION, FRAME_RATE, PAUSE_DURATION, OUTPUT_NAME)
     else:
         average_images(OUTPUT_NAME)
-        # change_appearence(OUTPUT_NAME)
 
     elapsed_time = time.time() - start_time
     print("Time elapsed: {}".format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
