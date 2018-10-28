@@ -1,4 +1,7 @@
 # face-movie 
+
+<img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/demo.gif" width="600">
+
 Create a video warp sequence of human faces. Can be used, for example, to create a time-lapse video showing someone's face change over time. See demos [here](https://www.youtube.com/watch?v=sbHCar2T-e0) and [here](TODO).
 
 Supported on Python 3 and OpenCV 3+. Tested on macOS High Sierra.
