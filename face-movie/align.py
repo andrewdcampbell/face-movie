@@ -53,7 +53,7 @@ def get_landmarks(im):
     assert len(rects) > 0, "No faces found!"
     target_rect = rects[0] 
     if len(rects) > 1:
-        target_box = prompt_user_to_choose_face(im, rects)
+        target_rect = prompt_user_to_choose_face(im, rects)
     res = np.matrix([[p.x, p.y] for p in PREDICTOR(im, target_rect).parts()])
     return res
 
