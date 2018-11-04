@@ -47,7 +47,7 @@ At this point you should inspect the output images and re-run the alignment with
 
 3) Morph the sequence with 
 ```
-python main.py -morph -images <ALIGN_OUTPUT> -td <TRANSITION_DUR> -pd <PAUSE_DUR> -fps <FPS> -out <OUTPUT_NAME>.mp4
+python face-movie/main.py -morph -images <ALIGN_OUTPUT> -td <TRANSITION_DUR> -pd <PAUSE_DUR> -fps <FPS> -out <OUTPUT_NAME>.mp4
 ```
 This will create a video `OUTPUT_NAME.mp4` in the root directory with the desired parameters. Note that `TRANSITION_DUR` and `PAUSE_DUR` are floating point values while `FPS` is an integer. 
 
