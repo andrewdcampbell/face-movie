@@ -5,7 +5,6 @@ import dlib
 import numpy as np
 import argparse
 import os
-import matplotlib.pyplot as plt
 
 PREDICTOR_PATH = "./shape_predictor_68_face_landmarks.dat"
 
@@ -30,6 +29,7 @@ cache = dict()
 
 def prompt_user_to_choose_face(im, rects):
     im = im.copy()
+    h, w = im.shape[:2]
     for i in range(len(rects)):
         d = rects[i]
         x1, y1, x2, y2 = d.left(), d.top(), d.right()+1, d.bottom()+1
@@ -39,11 +39,13 @@ def prompt_user_to_choose_face(im, rects):
                     fontScale=1.5,
                     color=(255, 255, 255),
                     thickness=5)
-    plt.imshow(cv2.cvtColor(im, cv2.COLOR_BGR2RGB))
-    plt.show(block=False)
+
+    DISPLAY_HEIGHT = 650
+    resized = cv2.resize(im, (int(w * DISPLAY_HEIGHT / float(h)), DISPLAY_HEIGHT))
+    cv2.imshow("Multiple faces", resized); cv2.waitKey(1)
     target_index = int(input("Please choose the index of the target face: "))
-    plt.close()
-    return rects[target_index]  
+    cv2.destroyAllWindows(); cv2.waitKey(1)
+    return rects[target_index]
 
 def get_landmarks(im):
     rects = DETECTOR(im, 1)
