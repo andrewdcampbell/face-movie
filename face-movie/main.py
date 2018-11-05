@@ -31,7 +31,10 @@ def get_landmarks(im):
     rects = DETECTOR(im, 1)
     if len(rects) == 0 and len(DETECTOR(im, 0)) > 0:
         rects = DETECTOR(im, 0)
-    assert len(rects) > 0, "No faces found!"
+
+    if len(rects) == 0:
+        return None
+
     target_rect = rects[0] 
     if len(rects) > 1:
         target_rect = prompt_user_to_choose_face(im, rects)
@@ -143,21 +146,34 @@ def morph_pair(idx1, idx2, duration, fps, out_name, stream):
     im1_landmarks = LANDMARK_LIST[idx1]
     im2_landmarks = LANDMARK_LIST[idx2]
 
-    average_landmarks = (im1_landmarks + im2_landmarks) / 2  
-
-    triangulation = Delaunay(average_landmarks).simplices
-    # draw_triangulation(im2, average_landmarks, triangulation)
-
-    h, w = im1.shape[:2]
-
     total_frames = int(duration * fps)
-    morph_seq(total_frames, im1, im2, im1_landmarks, im2_landmarks, 
-        triangulation.tolist(), (w, h), out_name, stream)
+
+    if im1_landmarks is None or im2_landmarks is None:
+        print("No faces found, performing cross-dissolve between {} and {}"
+            .format(IM_FILES[idx1], IM_FILES[idx2]))
+        cross_dissolve(total_frames, im1, im2, stream)
+
+    else:
+        average_landmarks = (im1_landmarks + im2_landmarks) / 2  
+
+        triangulation = Delaunay(average_landmarks).simplices
+        # draw_triangulation(im2, average_landmarks, triangulation)
+
+        h, w = im1.shape[:2]
+        morph_seq(total_frames, im1, im2, im1_landmarks, im2_landmarks, 
+            triangulation.tolist(), (w, h), out_name, stream)
     return Image.fromarray(cv2.cvtColor(im2, cv2.COLOR_BGR2RGB))
 
 # TODO: less janky way of filling frames?
 def fill_frames(im, num, p):
     for _ in range(num):
+        im.save(p.stdin, 'JPEG')
+
+def cross_dissolve(total_frames, im1, im2, p):
+    for j in range(total_frames):
+        alpha = j / (total_frames - 1)    
+        blended = (1.0 - alpha) * im1 + alpha * im2
+        im = Image.fromarray(cv2.cvtColor(np.uint8(blended), cv2.COLOR_BGR2RGB))
         im.save(p.stdin, 'JPEG')
 
 if __name__ == "__main__":

@@ -62,6 +62,17 @@ The images used to produce the first demo video are included in `demos/daniel`. 
 
 * If you have photos that are already the same size and all of the faces are more or less aligned already (e.g. roster photos or yearbook photos), you can skip steps 1 and 2 and just use the directory of photos as your aligned images.
 
+* If you want to add some photos to the end of an existing morph sequence (and avoid rendering the entire video again), you can make a temporary directory containing the last aligned image in the movie and aligned images you want to append. Make a morph sequence out of just those images, making sure to use the same frame rate. Now concatenate them with
+```
+ffmpeg -safe 0 -f concat -i list.txt -c copy merged.mp4
+```
+where `list.txt` is of the form 
+```
+file 'path/to/video1.mp4'
+file 'path/to/video2.mp4'
+...
+
+```
 
 ## Averaging Faces
 
