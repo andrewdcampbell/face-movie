@@ -74,6 +74,16 @@ file 'path/to/video2.mp4'
 
 ```
 
+* For adding music longer than the video, you can fade the audio out with
+```
+VIDEO="<PATH_TO_VIDEO>"
+AUDIO="<PATH_TO_AUDIO>" # can also drag and drop audio track to terminal (don't use quotes)
+FADE="<FADE_DURATION_IN_SECONDS>"
+
+VIDEO_LENGTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=duration -of csv=p=0 $VIDEO)"
+ffmpeg -i $VIDEO -i "$AUDIO" -filter_complex "[1:a]afade=t=out:st=$(bc <<< "$VIDEO_LENGTH-$FADE"):d=$FADE[a]" -map 0:v:0 -map "[a]" -c:v copy -c:a aac with_audio.mp4
+```
+
 ## Averaging Faces
 
 You can also use the code to create a face average. Follow the same steps 1) - 2) as above. You probably don't want to overlay images or use a border, however. Then run
