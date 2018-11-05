@@ -4,23 +4,21 @@
 
 Create a video warp sequence of human faces. Can be used, for example, to create a time-lapse video showing someone's face change over time. See demos [here](https://www.youtube.com/watch?v=sbHCar2T-e0) and [here](https://www.youtube.com/watch?v=5JzHgAh3Sqw).
 
-Supported on Python 3 and OpenCV 3+. Tested on macOS High Sierra.
+Supported on Python 3 and OpenCV 3+. Tested on macOS High Sierra and Mojave.
 
 For more information, see my [blog post](https://andrewdcampbell.github.io/face-morphing) about this project.
 
 ## Requirements
 * OpenCV
-  * If you're using [Anaconda](https://www.anaconda.com/download/), run `conda install -c menpo opencv`.
+  * For conda users, run `conda install -c conda-forge opencv`.
 * Dlib
-  * If you're using [Anaconda](https://www.anaconda.com/download/), run `conda install -c menpo dlib`.  
-* Boost and Boost-Python
-  * If you're using [Anaconda](https://www.anaconda.com/download/), run `conda install -c meznom boost-python`.
+  * For conda users, run `conda install -c conda-forge dlib`.
+* ffmpeg
+  * For conda users, run `conda install -c conda-forge ffmpeg`.  
 * scipy
 * numpy
 * matplotlib
-* PIL
-* ffmpeg
-  * If you're using [Homebrew](https://brew.sh), run `brew install ffmpeg`.
+* pillow
 
 ## Installation
 1. Clone the repo.
