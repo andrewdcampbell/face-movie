@@ -81,7 +81,7 @@ AUDIO="<PATH_TO_AUDIO>" # can also drag and drop audio track to terminal (don't 
 FADE="<FADE_DURATION_IN_SECONDS>"
 
 VIDEO_LENGTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=duration -of csv=p=0 $VIDEO)"
-ffmpeg -i $VIDEO -i "$AUDIO" -filter_complex "[1:a]afade=t=out:st=$(bc <<< "$VIDEO_LENGTH-$FADE"):d=$FADE[a]" -map 0:v:0 -map "[a]" -c:v copy -c:a aac with_audio.mp4
+ffmpeg -i $VIDEO -i "$AUDIO" -filter_complex "[1:a]afade=t=out:st=$(bc <<< "$VIDEO_LENGTH-$FADE"):d=$FADE[a]" -map 0:v:0 -map "[a]" -c:v copy -c:a aac -shortest with_audio.mp4
 ```
 
 ## Averaging Faces
