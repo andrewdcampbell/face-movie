@@ -6,8 +6,6 @@ Create a video warp sequence of human faces. Can be used, for example, to create
 
 Supported on Python 3 and OpenCV 3+. Tested on macOS High Sierra and Mojave.
 
-For more information, see my [blog post](https://andrewdcampbell.github.io/face-morphing) about this project.
-
 ## Requirements
 * OpenCV
   * For conda users, run `conda install -c conda-forge opencv`.
