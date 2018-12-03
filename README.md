@@ -31,7 +31,8 @@ git clone https://github.com/andrewdcampbell/face-movie
 
 2) Create a directory `<ALIGN_OUTPUT>`. Then align the faces in the images with 
 ```
-python face-movie/align.py -images <FACE_MOVIE_DIR> -target <BASE_IMAGE> [-overlay] [-border <BORDER>] -outdir <ALIGN_OUTPUT>
+python face-movie/align.py -images <FACE_MOVIE_DIR> -target <BASE_IMAGE> 
+                           [-overlay] [-border <BORDER>] -outdir <ALIGN_OUTPUT>
 ```
 The output will be saved to the provided `<ALIGN_OUTPUT>` directory. BASE_IMAGE is the image to which all other images will be aligned to. It should represent the "typical" image of all your images - it will determine the output dimensions and facial position.
 
@@ -43,7 +44,8 @@ At this point you should inspect the output images and re-run the alignment with
 
 3) Morph the sequence with 
 ```
-python face-movie/main.py -morph -images <ALIGN_OUTPUT> -td <TRANSITION_DUR> -pd <PAUSE_DUR> -fps <FPS> -out <OUTPUT_NAME>.mp4
+python face-movie/main.py -morph -images <ALIGN_OUTPUT> -td <TRANSITION_DUR> 
+                          -pd <PAUSE_DUR> -fps <FPS> -out <OUTPUT_NAME>.mp4
 ```
 This will create a video `OUTPUT_NAME.mp4` in the root directory with the desired parameters. Note that `TRANSITION_DUR` and `PAUSE_DUR` are floating point values while `FPS` is an integer. 
 
@@ -51,7 +53,8 @@ You may again be prompted to choose the correct face.
 
 4) (Optional) Add music with
 ```
-ffmpeg -i <OUTPUT_NAME>.mp4 -i <AUDIO_TRACK> -map 0:v -map 1:a -c copy -shortest -pix_fmt yuv420p <NEW_OUTPUT_NAME>.mov
+ffmpeg -i <OUTPUT_NAME>.mp4 -i <AUDIO_TRACK> -map 0:v -map 1:a -c copy 
+       -shortest -pix_fmt yuv420p <NEW_OUTPUT_NAME>.mov
 ```
 
 The images used to produce the first demo video are included in `demos/daniel`. Step 2 should produce something like the aligned images shown in `demos/daniel_aligned`. Step 3 should produce something like the video `daniel.mp4`.
@@ -91,12 +94,12 @@ python face-movie/main.py -average -images <ALIGN_OUTPUT> -out <OUTPUT_NAME>.jpg
 
 A small face dataset is included in the demos directory.
 
-<img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/face_dataset/male_faces.png" width="600"> 
-<img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/face_dataset/female_faces.png" width="600">
+<img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/face_dataset/male_faces.png" width="500"> 
+<img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/face_dataset/female_faces.png" width="500">
 
 The computed average male and female face are shown below.
 
-<img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/male_avg.jpg" width="320"> <img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/female_avg.jpg" width="320">
+<img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/male_avg.jpg" width="250"> <img src="https://github.com/andrewdcampbell/face-movie/blob/master/demos/female_avg.jpg" width="250">
 
 ## Acknowledgements
 * Facial landmark and image alignment code adapted from https://matthewearl.github.io/2015/07/28/switching-eds-with-python/.
