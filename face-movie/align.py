@@ -27,6 +27,10 @@ PREDICTOR = dlib.shape_predictor(PREDICTOR_PATH)
 
 cache = dict()
 
+class NoFaceException(Exception):
+    pass
+
+
 def prompt_user_to_choose_face(im, rects):
     im = im.copy()
     h, w = im.shape[:2]
@@ -51,7 +55,8 @@ def get_landmarks(im):
     rects = DETECTOR(im, 1)
     if len(rects) == 0 and len(DETECTOR(im, 0)) > 0:
         rects = DETECTOR(im, 0)
-    assert len(rects) > 0, "No faces found!"
+    if len(rects) == 0:
+        raise NoFaceException("No faces found!")
     target_rect = rects[0] 
     if len(rects) > 1:
         target_rect = prompt_user_to_choose_face(im, rects)
@@ -137,7 +142,12 @@ def warp_im(im, M, dshape, prev):
 
 def align_images(impath1, impath2, border, prev=None):
     im1, landmarks1 = read_im_and_landmarks(impath1)
-    im2, landmarks2 = read_im_and_landmarks(impath2)
+    filename = os.path.basename(impath2).split('.')[0]
+    try:
+        im2, landmarks2 = read_im_and_landmarks(impath2)
+    except NoFaceException:
+        print("No face in {}, Skipped".format(filename))
+        return
 
     T = transformation_from_points(landmarks1[ALIGN_POINTS],
                                    landmarks2[ALIGN_POINTS])
@@ -150,7 +160,6 @@ def align_images(impath1, impath2, border, prev=None):
 
     warped_im2 = warp_im(im2, M, im1.shape, prev)
 
-    filename = os.path.basename(impath2).split('.')[0]
     cv2.imwrite("{}/{}.jpg".format(OUTPUT_DIR, filename), warped_im2)
     print("Aligned {}".format(filename))
     return warped_im2
@@ -182,7 +191,9 @@ if __name__ == "__main__":
     im_files = sorted(im_files, key=lambda x: x.split('/'))
     for im in im_files:
         if overlay:
-            prev = align_images(target, im_dir + '/' + im, border, prev)
+            new_image = align_images(target, im_dir + '/' + im, border, prev)
+            if new_image is not None:
+                prev = new_image
         else:
             align_images(target, im_dir + '/' + im, border)
 
