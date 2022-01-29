@@ -18,12 +18,28 @@ Supported on Python 3 and OpenCV 3+. Tested on macOS High Sierra and Mojave.
 * matplotlib
 * pillow
 
+For brew users:
+```
+brew install opencv ffmpeg
+```
+
 ## Installation
 1. Clone the repo.
 ```
 git clone https://github.com/andrewdcampbell/face-movie
+cd face-movie
 ```
 2. Download the trained face detector model from [here](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2). Unzip it and place it in the root directory of the repo.
+```
+curl http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2 > shape_predictor_68_face_landmarks.dat.bz2
+bunzip2 shape_predictor_68_face_landmarks.dat.bz2
+```
+3. Create a virtualenv.
+```
+python3 -m venv venv
+source venv/bin/activate
+python3 -m pip install -r requirements.txt
+```
 
 ## Creating a face movie - reccomended workflow
 
