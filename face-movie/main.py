@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # USAGE: python face-movie/main.py (-morph | -average) -images IMAGES [-td TD] [-pd PD] [-fps FPS] -out OUT
 
 from scipy.spatial import Delaunay
