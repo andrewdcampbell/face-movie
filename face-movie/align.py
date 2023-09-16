@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # USAGE: python face-movie/align.py -images IMAGES -target TARGET [-overlay] [-border BORDER] -outdir OUTDIR
 
 import cv2
