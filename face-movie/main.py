@@ -15,8 +15,10 @@ import time
 # FACIAL LANDMARK DETECTION CODE
 ########################################
 
+DETECTOR_PATH = "./mmod_human_face_detector.dat"
 PREDICTOR_PATH = "./shape_predictor_68_face_landmarks.dat"
-DETECTOR = dlib.get_frontal_face_detector()
+DETECTOR1 = dlib.get_frontal_face_detector()
+DETECTOR2 = dlib.cnn_face_detection_model_v1(DETECTOR_PATH)
 PREDICTOR = dlib.shape_predictor(PREDICTOR_PATH)
 
 def get_boundary_points(shape):
@@ -28,14 +30,19 @@ def get_boundary_points(shape):
     return np.array(boundary_pts)
 
 def get_landmarks(im):
-    rects = DETECTOR(im, 1)
-    if len(rects) == 0 and len(DETECTOR(im, 0)) > 0:
-        rects = DETECTOR(im, 0)
+    rects = DETECTOR1(im, 1)
+    if len(rects) == 0:
+        rects = DETECTOR1(im, 0)
+        if len(rects) == 0:
+            rects = DETECTOR2(im, 1)
+            if len(rects) == 0:
+                rects = DETECTOR2(im, 0)
+            rects = [r.rect for r in rects]
 
     if len(rects) == 0:
         return None
 
-    target_rect = rects[0] 
+    target_rect = rects[0]
     if len(rects) > 1:
         target_rect = prompt_user_to_choose_face(im, rects)
 

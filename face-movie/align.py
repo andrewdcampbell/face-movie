@@ -6,6 +6,7 @@ import numpy as np
 import argparse
 import os
 
+DETECTOR_PATH = "./mmod_human_face_detector.dat"
 PREDICTOR_PATH = "./shape_predictor_68_face_landmarks.dat"
 
 FACE_POINTS = list(range(17, 68))
@@ -22,7 +23,8 @@ ALIGN_POINTS = (LEFT_BROW_POINTS + RIGHT_EYE_POINTS + LEFT_EYE_POINTS +
                     RIGHT_BROW_POINTS + NOSE_POINTS + MOUTH_POINTS)
 
 
-DETECTOR = dlib.get_frontal_face_detector()
+DETECTOR1 = dlib.get_frontal_face_detector()
+DETECTOR2 = dlib.cnn_face_detection_model_v1(DETECTOR_PATH)
 PREDICTOR = dlib.shape_predictor(PREDICTOR_PATH)
 
 cache = dict()
@@ -48,9 +50,14 @@ def prompt_user_to_choose_face(im, rects):
     return rects[target_index]
 
 def get_landmarks(im):
-    rects = DETECTOR(im, 1)
-    if len(rects) == 0 and len(DETECTOR(im, 0)) > 0:
-        rects = DETECTOR(im, 0)
+    rects = DETECTOR1(im, 1)
+    if len(rects) == 0:
+        rects = DETECTOR1(im, 0)
+        if len(rects) == 0:
+            rects = DETECTOR2(im, 1)
+            if len(rects) == 0:
+                rects = DETECTOR2(im, 0)
+            rects = [r.rect for r in rects]
     assert len(rects) > 0, "No faces found!"
     target_rect = rects[0] 
     if len(rects) > 1:
